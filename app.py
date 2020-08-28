@@ -1,10 +1,8 @@
 import streamlit as st
 import yake
-from yake.highlight import TextHighlighter
 import pandas as pd
 import numpy as np
-from PIL import Image 
-from wordcloud import WordCloud, ImageColorGenerator
+from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import spacy
 from spacy import displacy
@@ -58,7 +56,7 @@ for i in range(1, len(keywords)):
         d = dict(start = m.start(), end = m.end(), label = "")
         ents.append(d)
         
-#sort the result by ents, as ent rule suggests.
+#sort the result by ents, as ent rule suggests
 sort_ents = sorted(ents, key=lambda x: x["start"])
 
 st.header('Result')
@@ -67,7 +65,6 @@ ex = [{"text": text,
        "ents": sort_ents,
        "title": None}]
 
-#st.text(text)
 html = displacy.render(ex, style="ent", manual=True)
 html = html.replace("\n", " ")
 st.write(HTML_WRAPPER.format(html), unsafe_allow_html=True)
@@ -76,10 +73,10 @@ st.write(HTML_WRAPPER.format(html), unsafe_allow_html=True)
 df = pd.DataFrame(keywords, columns=("Keywords by Yake","Keywords Score"))
 st.dataframe(df)
 
-# Create and generate a word cloud image:
+#create and generate a word cloud image
 wordcloud = WordCloud(width = 1000, height = 600, background_color="white", collocations=False, regexp = r"\w[\w ']+").generate(keywords_list)
 
-#Display the generated image:
+#display the generated image
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis("off")
 plt.show()
